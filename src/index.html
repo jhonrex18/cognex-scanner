@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>TCP Monitor</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+			}
+			.card {
+				border: 1px solid #ccc;
+				padding: 10px;
+				margin: 10px;
+				border-radius: 5px;
+				background-color: #f9f9f9;
+				display: inline-block;
+				width: 45%;
+				vertical-align: top;
+			}
+			.card h3 {
+				margin: 0;
+			}
+			.card p {
+				margin: 5px 0;
+			}
+			.card .previous-scans {
+				max-height: 150px;
+				overflow-y: auto;
+				border: 1px solid #ddd;
+				padding: 5px;
+			}
+			.card .scan-item {
+				margin-bottom: 5px;
+			}
+			.status {
+				color: green; /* Default to connected */
+			}
+			.status.disconnected {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>TCP Monitor</h1>
+		<div id="monitor"></div>
+
+		<h2>Add New Target</h2>
+		<input type="text" id="ip" placeholder="IP Address" />
+		<input type="number" id="port" placeholder="Port" />
+		<button id="add-target">Add Target</button>
+
+		<script src="renderer.js"></script>
+	</body>
+</html>
