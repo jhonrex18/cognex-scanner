@@ -1,55 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>TCP Monitor</title>
+		<title>Pallet Scanner</title>
 		<style>
 			body {
 				font-family: Arial, sans-serif;
+				padding: 20px;
+				background: #f4f4f4;
 			}
 			.card {
 				border: 1px solid #ccc;
-				padding: 10px;
-				margin: 10px;
-				border-radius: 5px;
-				background-color: #f9f9f9;
-				display: inline-block;
-				width: 45%;
-				vertical-align: top;
+				border-radius: 8px;
+				padding: 15px;
+				margin: 15px 0;
+				background: white;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 			}
 			.card h3 {
-				margin: 0;
+				margin-top: 0;
 			}
-			.card p {
-				margin: 5px 0;
+			.scan-item {
+				padding: 4px 0;
+				font-family: monospace;
 			}
-			.card .previous-scans {
-				max-height: 150px;
-				overflow-y: auto;
+			#monitor {
+				margin-bottom: 30px;
+			}
+			/* Add Scanner Form */
+			form {
+				margin: 20px 0;
+				padding: 15px;
 				border: 1px solid #ddd;
-				padding: 5px;
+				border-radius: 8px;
+				background: #fff;
+				display: flex;
+				gap: 10px;
+				align-items: center;
 			}
-			.card .scan-item {
-				margin-bottom: 5px;
+			input {
+				padding: 8px;
+				font-size: 16px;
 			}
-			.status {
-				color: green; /* Default to connected */
+			button {
+				padding: 8px 16px;
+				font-size: 16px;
+				background: #0077cc;
+				color: white;
+				border: none;
+				border-radius: 4px;
+				cursor: pointer;
 			}
-			.status.disconnected {
-				color: red;
+			button:hover {
+				background: #005fa3;
 			}
 		</style>
 	</head>
 	<body>
-		<h1>TCP Monitor</h1>
+		<h1>Pallet Receiving Scanner</h1>
+
+		<!-- Add New Scanner -->
+		<form id="add-form">
+			<input
+				type="text"
+				id="ip"
+				placeholder="IP Address"
+				value="169.254.49.81"
+				required
+			/>
+			<input type="number" id="port" placeholder="Port" value="23" required />
+			<button type="submit">Add Scanner</button>
+		</form>
+
+		<!-- Scanner Cards -->
 		<div id="monitor"></div>
 
-		<h2>Add New Target</h2>
-		<input type="text" id="ip" placeholder="IP Address" />
-		<input type="number" id="port" placeholder="Port" />
-		<button id="add-target">Add Target</button>
-
-		<script src="renderer.js"></script>
+		<!-- Load Renderer -->
+		<script src="render.js"></script>
 	</body>
 </html>
