@@ -1,4 +1,3 @@
-// src/render.js
 const { ipcRenderer } = require('electron');
 
 const monitorState = {};
@@ -14,8 +13,8 @@ function updateMonitorUI(source) {
     const { currentScan, previousScanHistory, isConnected } = monitorState[source];
 
     currentScanElement.textContent = `Current Scan: ${currentScan || 'N/A'}`;
+    previousScansElement.innerHTML = '<p>Previous Scans:</p>';
 
-    previousScansElement.innerHTML = '';
     if (previousScanHistory && previousScanHistory.length > 0) {
         previousScanHistory.forEach((scan, index) => {
             const item = document.createElement('div');
@@ -58,7 +57,7 @@ function updateMonitorUI(source) {
         reconnectBtn.style.display = 'inline-block';
     }
 
-    // Remove Button (Only for Disconnected)
+    // Remove Button
     let removeBtn = card.querySelector('.remove-btn');
     if (isConnected) {
         if (removeBtn) removeBtn.style.display = 'none';
@@ -91,7 +90,6 @@ function createOrUpdateCard(source) {
         card = document.createElement('div');
         card.id = `card-${source}`;
         card.className = 'card';
-
         card.innerHTML = `
       <h3>${source}</h3>
       <p class="status">Status: ...</p>
@@ -119,7 +117,6 @@ document.getElementById('add-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const ip = document.getElementById('ip').value.trim();
     const port = parseInt(document.getElementById('port').value, 10);
-
     if (ip && !isNaN(port)) {
         const key = `${ip}:${port}`;
         if (!monitorState[key]) {
@@ -152,7 +149,7 @@ ipcRenderer.on('connection-established', (event, { source }) => {
 });
 
 // Scan received
-ipcRenderer.on('serial-scanned', (event, { source, data }) => {
+ipcRenderer.on('serial-scanned', (event, { source, serial }) => {
     if (!monitorState[source]) {
         monitorState[source] = {
             currentScan: null,
@@ -162,16 +159,15 @@ ipcRenderer.on('serial-scanned', (event, { source, data }) => {
         createOrUpdateCard(source);
     }
 
-    monitorState[source].previousScanHistory.push(data);
+    monitorState[source].previousScanHistory.push(serial);
     if (monitorState[source].previousScanHistory.length > 5) {
         monitorState[source].previousScanHistory.shift();
     }
-    monitorState[source].currentScan = data;
-
+    monitorState[source].currentScan = serial;
     updateMonitorUI(source);
 });
 
-// Disconnected
+// Connection closed
 ipcRenderer.on('connection-closed', (event, { source }) => {
     if (monitorState[source]) {
         monitorState[source].isConnected = false;
@@ -191,6 +187,5 @@ ipcRenderer.on('reconnect-failed', (event, { source }) => {
 ipcRenderer.on('scanner-removed', (event, { source }) => {
     const card = document.getElementById(`card-${source}`);
     if (card) card.remove();
-
     delete monitorState[source];
 });
